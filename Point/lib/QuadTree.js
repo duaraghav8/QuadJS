@@ -1,66 +1,98 @@
-var Node = (function (x, y, value) {
-	this.x = x;
-	this.y = y;
+var Node = (function (key, value) {
+	this.key = key;
 	this.value = value;
-	this.NW = null, this.NE = null, this.SW = null, this.SE = null;
+	this.NE = null, this.NW = null, this.SE = null, this.SW = null;
 });
 
 var QuadTree = (function () {
-	this.root = null;
+	this.root = new Node ([-Infinity, -Infinity], null);
 });
 
-QuadTree.prototype.insert = function (root, x, y, value) {
-	console.log (root);
-	if (root == null) {
-		root = new Node (x, y, value);
-		//console.log ('done');
-	}
-	else {
-		if (x > root.x) {
-			if (y > root.y) {
-				this.insert (root.NE, x, y, value);
+QuadTree.prototype.insert = function (root, key, value) {
+	/*NOTE: If 2 X-axis Keys are equal, the key to be inserted is sent to the west of the current one.
+			If 2 Y-axis Keys are equal, the key to be inserted is sent to the south of the current one.
+	*/
+
+	if (key [0] > root.key [1]) {
+		if (key [1] > root.key [1]) {
+			if (root.NE == null) {
+				root.NE = new Node (key, value);
 			}
 			else {
-				this.insert (root.SE, x, y, value);
+				this.insert (root.NE, key, value);
 			}
 		}
 		else {
-			if (y > root.y) {
-				this.insert (root.NW, x, y, value);
+			if (root.SE == null) {
+				root.SE = new Node (key, value);
 			}
 			else {
-				this.insert (root.SW, x, y, value);
+				this.insert (root.SE, key, value);
 			}
 		}
 	}
-};
+	else {
+		if (key [1] > root.key [1]) {
+			if (root.NW == null) {
+				root.NW = new Node (key, value);
+			}
+			else {
+				this.insert (root.NW, key, value);
+			}
+		}
+		else {
+			if (root.SW == null) {
+				root.SW = new Node (key, value);
+			}
+			else {
+				this.insert (root.SW, key, value);
+			}
+		}
+	}
+}
 
-QuadTree.prototype.find = function (root, x, y) {
-	if (root.x == x && root.y == y) {
+QuadTree.prototype.find = function (root, key) {
+	if (root.key [0] == key [0] && root.key [1] == key [1]) {
 		return (root.value);
 	}
 	else {
-		if (x > root.x) {
-			if (y > root.y) {
-				this.find (root.NE, x, y);
+		if (key [0] > root.key [0]) {
+			if (key [1] > root.key [1]) {
+				if (root.NE == null) {
+					return (null);
+				}
+				else {
+					return (this.find (root.NE, key));
+				}
 			}
 			else {
-				this.find (root.SE, x, y);
+				if (root.SE == null) {
+					return (null);
+				}
+				else {
+					return (this.find (root.SE, key));
+				}
 			}
 		}
 		else {
-			if (y > root.y) {
-				this.find (root.NW, x, y);
+			if (key [1] > root.key [1]) {
+				if (root.NW == null) {
+					return (null);
+				}
+				else {
+					return (this.find (root.NW, key));
+				}
 			}
 			else {
-				this.find (root.SW, x, y);
+				if (root.SW == null) {
+					return (null);
+				}
+				else {
+					return (this.find (root.SW, key));
+				}
 			}
 		}
 	}
-};
-
-QuadTree.prototype.nearestNeighbour = function (root, x, y) {
-	//logic for Nearest Neighbour
 }
 
 module.exports = QuadTree;

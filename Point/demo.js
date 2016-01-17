@@ -1,18 +1,11 @@
-var QuadTree = require ('./lib/QuadTree');
+var QuadTree = require ('./lib/QuadTree')
 var myTree = new QuadTree ();
-var locations = [
-	[35, 40, 'Downtown'],
-	[60, 75, 'Kirkland'],
-	[80, 65, 'Mustafa'],
-	[5, 45, '6th Avenue'],
-	[85, 15, 'Cafe Headquarters'],
-	[50, 10, 'Shit Street'],
-	[90, 5, 'Cute Street'],
-	[25, 35, 'dafuck Street']
-];
 
-locations.forEach (function (location) {
-	myTree.insert (myTree.root, location [0], location [1], location [2]);
-});
+myTree.insert (myTree.root, [10, 289], 'Hello worlde');
+myTree.insert (myTree.root, [10, 182], 'Helluwysgude');
+myTree.insert (myTree.root, [19, 22], 'Helluwysgude');
+myTree.insert (myTree.root, [8917, 1892], 'Helluwysgude');
+myTree.insert (myTree.root, [901, 18927], 'Helluwysgude');
 
-console.log (myTree.find (myTree.root, 90, 5));
+console.log (myTree.find (myTree.root, [901, 18927]));
+console.log (myTree.find (myTree.root, [10, 299]));
